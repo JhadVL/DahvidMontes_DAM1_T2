@@ -3,45 +3,25 @@ package edu.pe.cibertec.dahvidmontes_dam1_t2
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import edu.pe.cibertec.dahvidmontes_dam1_t2.ui.theme.DahvidMontes_DAM1_T2Theme
+import androidx.activity.viewModels
+import edu.pe.cibertec.dahvidmontes_dam1_t2.ui.screens.ListaGastosScreen
+import edu.pe.cibertec.dahvidmontes_dam1_t2.ui.theme.GastosAppTheme
+import edu.pe.cibertec.dahvidmontes_dam1_t2.ui.viewmodel.GastoViewModel
+import edu.pe.cibertec.dahvidmontes_dam1_t2.ui.viewmodel.ViewModelFactory
 
 class MainActivity : ComponentActivity() {
+
+    private val gastoViewModel: GastoViewModel by viewModels {
+        val app = application as GastosAppApplication
+        ViewModelFactory(app.gastoRepository)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            DahvidMontes_DAM1_T2Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+            GastosAppTheme {
+                ListaGastosScreen(viewModel = gastoViewModel)
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    DahvidMontes_DAM1_T2Theme {
-        Greeting("Android")
     }
 }
