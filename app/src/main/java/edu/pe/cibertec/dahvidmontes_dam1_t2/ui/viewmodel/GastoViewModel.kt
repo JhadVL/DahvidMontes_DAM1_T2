@@ -91,17 +91,6 @@ class GastoViewModel(
     ) {
         viewModelScope.launch {
             try {
-                val limites = mapOf(
-                    1 to 800.0,  // Alimentación
-                    2 to 300.0,  // Transporte
-                    3 to 200.0,  // Entretenimiento
-                    4 to 1500.0, // Vivienda
-                    5 to 450.0,  // Salud
-                    6 to 150.0,  // Café/Bebidas
-                    7 to 500.0,  // Compras
-                    8 to 300.0   // Otros
-                )
-
                 val nombresCategorias = mapOf(
                     1 to "Alimentación",
                     2 to "Transporte",
@@ -111,6 +100,17 @@ class GastoViewModel(
                     6 to "Café/Bebidas",
                     7 to "Compras",
                     8 to "Otros"
+                )
+
+                val limites = mapOf(
+                    1 to 800.0,
+                    2 to 300.0,
+                    3 to 200.0,
+                    4 to 1500.0,
+                    5 to 450.0,
+                    6 to 150.0,
+                    7 to 500.0,
+                    8 to 300.0
                 )
 
                 val limite = limites[categoriaId] ?: Double.MAX_VALUE

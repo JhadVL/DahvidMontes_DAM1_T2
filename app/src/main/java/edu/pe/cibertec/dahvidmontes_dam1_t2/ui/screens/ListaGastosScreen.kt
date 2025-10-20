@@ -38,15 +38,12 @@ fun ListaGastosScreen(
     var mostrarSnackbar by remember { mutableStateOf(false) }
     var mensajeAdvertencia by remember { mutableStateOf<String?>(null) }
 
-    // 🧮 Total general
     val totalGeneral = gastos.sumOf { it.monto }
 
-    // 🔻 Estados para eliminar
     var gastoSeleccionado by remember { mutableStateOf<GastoEntity?>(null) }
     var mostrarSheet by remember { mutableStateOf(false) }
     var mostrarConfirmacion by remember { mutableStateOf(false) }
 
-    // ✅ Snackbar éxito guardar
     if (mostrarSnackbar) {
         LaunchedEffect(Unit) {
             snackbarHostState.showSnackbar("✓ Gasto guardado correctamente")
@@ -54,7 +51,6 @@ fun ListaGastosScreen(
         }
     }
 
-    // ✅ Snackbar advertencia
     mensajeAdvertencia?.let { mensaje ->
         LaunchedEffect(mensaje) {
             snackbarHostState.showSnackbar(
@@ -87,10 +83,10 @@ fun ListaGastosScreen(
                 actions = {
                     FloatingActionButton(
                         onClick = { mostrarDialogo = true },
-                        containerColor = Color(0xFF4CAF50), // Verde Material
+                        containerColor = Color(0xFF4CAF50),
                         contentColor = Color.White,
                         modifier = Modifier
-                            .size(40.dp) // Tamaño más pequeño que el FAB normal
+                            .size(40.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
@@ -145,7 +141,6 @@ fun ListaGastosScreen(
                             )
                         }
 
-                        // 🧮 Item final: total general
                         item {
                             Text(
                                 text = "Total: -S/. %.2f".format(totalGeneral),
@@ -163,7 +158,6 @@ fun ListaGastosScreen(
         }
     }
 
-    // 🪟 Dialogo de agregar gasto
     if (mostrarDialogo) {
         AgregarGastoDialog(
             onDismiss = { mostrarDialogo = false },
@@ -182,7 +176,6 @@ fun ListaGastosScreen(
         )
     }
 
-    // ⬇️ BottomSheet con opciones
     if (mostrarSheet && gastoSeleccionado != null) {
         ModalBottomSheet(onDismissRequest = { mostrarSheet = false }) {
             Column(modifier = Modifier.fillMaxWidth()) {
@@ -206,7 +199,6 @@ fun ListaGastosScreen(
         }
     }
 
-    // ⚠️ Confirmar eliminación
     if (mostrarConfirmacion && gastoSeleccionado != null) {
         val gasto = gastoSeleccionado!!
         AlertDialog(
@@ -240,15 +232,15 @@ fun ListaGastosScreen(
 
 fun colorCategoria(categoriaId: Int): Color {
     return when (categoriaId) {
-        1 -> Color(0xFFDFF6E0) // Verde claro (Alimentación)
-        2 -> Color(0xFFDDEBFF) // Azul claro (Transporte)
-        3 -> Color(0xFFE8D9FF) // Púrpura claro (Entretenimiento)
-        4 -> Color(0xFFFFD9D9) // Rojo claro (Vivienda)
-        5 -> Color(0xFFFFE5E5) // Rojo más claro (Salud)
-        6 -> Color(0xFFF2E0D0) // Café claro (Café/Bebidas)
-        7 -> Color(0xFFFFE8CC) // Naranja claro (Compras)
-        8 -> Color(0xFFE6E6E6) // Gris claro (Otros)
-        else -> Color(0xFFF5F5F5) // Por defecto
+        1 -> Color(0xFFDFF6E0)
+        2 -> Color(0xFFDDEBFF)
+        3 -> Color(0xFFE8D9FF)
+        4 -> Color(0xFFFFD9D9)
+        5 -> Color(0xFFFFE5E5)
+        6 -> Color(0xFFF2E0D0)
+        7 -> Color(0xFFFFE8CC)
+        8 -> Color(0xFFE6E6E6)
+        else -> Color(0xFFF5F5F5)
     }
 }
 
@@ -280,7 +272,7 @@ fun GastoItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() }, // 🟢 Detectar clic para abrir el BottomSheet
+            .clickable { onClick() },
         colors = CardDefaults.cardColors(
             containerColor = colorCategoria(gasto.categoriaId)
         ),
@@ -305,7 +297,7 @@ fun GastoItem(
             Text(
                 text = montoTexto,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.error, // 🔴 monto en rojo
+                color = MaterialTheme.colorScheme.error,
                 fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
             )
         }
@@ -336,7 +328,6 @@ fun AgregarGastoDialog(
         "Salud", "Café/Bebidas", "Compras", "Otros"
     )
 
-    // Estados para AlertDialog de validación
     var mostrarErrorMonto by remember { mutableStateOf(false) }
     var mostrarErrorCategoria by remember { mutableStateOf(false) }
 
@@ -464,13 +455,11 @@ fun AgregarGastoDialog(
                     val montoDouble = monto.toDoubleOrNull() ?: 0.0
                     val categoriaInt = categorias.indexOf(categoriaSeleccionada) + 1
 
-                    // ✅ Validaciones
                     when {
                         montoDouble <= 0 -> mostrarErrorMonto = true
                         categoriaSeleccionada.isBlank() -> mostrarErrorCategoria = true
                         else -> {
                             onConfirm(descripcion, montoDouble, categoriaInt, fechaMillis)
-                            // Limpiar campos después de guardar
                             descripcion = ""
                             monto = ""
                             categoriaSeleccionada = "Alimentación"
@@ -489,7 +478,6 @@ fun AgregarGastoDialog(
         }
     )
 
-    // AlertDialog para error de monto
     if (mostrarErrorMonto) {
         AlertDialog(
             onDismissRequest = { mostrarErrorMonto = false },
@@ -503,7 +491,6 @@ fun AgregarGastoDialog(
         )
     }
 
-    // AlertDialog para error de categoría
     if (mostrarErrorCategoria) {
         AlertDialog(
             onDismissRequest = { mostrarErrorCategoria = false },
